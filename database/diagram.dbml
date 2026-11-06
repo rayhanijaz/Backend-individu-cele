@@ -1,0 +1,86 @@
+Table warga {
+  id_warga int [pk, increment]
+  nik varchar(16) [not null, unique]
+  nama_lengkap varchar(100) [not null]
+  jenis_kelamin char(1)
+  tempat_lahir varchar(100)
+  tanggal_lahir date
+  alamat text [not null]
+  rt varchar(3)
+  rw varchar(3)
+  no_telepon varchar(20)
+  email varchar(100)
+  status_warga varchar(20) [not null, default: 'Aktif']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table profil_warga {
+  id_profil int [pk, increment]
+  id_warga int [not null, unique]
+  no_kk varchar(16)
+  agama varchar(30)
+  pekerjaan varchar(100)
+  pendidikan_terakhir varchar(50)
+  status_perkawinan varchar(30)
+  kewarganegaraan varchar(30)
+  golongan_darah varchar(3)
+  created_at timestamp
+}
+
+Table kategori_kegiatan {
+  id_kategori int [pk, increment]
+  nama_kategori varchar(80) [not null, unique]
+  deskripsi text
+  created_at timestamp
+}
+
+Table kegiatan {
+  id_kegiatan int [pk, increment]
+  id_kategori int [not null]
+  nama_kegiatan varchar(150) [not null]
+  deskripsi text
+  lokasi varchar(200) [not null]
+  tanggal_kegiatan date [not null]
+  waktu_mulai time
+  waktu_selesai time
+  status_kegiatan varchar(20) [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table partisipasi_kegiatan {
+  id_partisipasi int [pk, increment]
+  id_warga int [not null]
+  id_kegiatan int [not null]
+  tanggal_daftar timestamp
+  status_pendaftaran varchar(20) [not null]
+  status_kehadiran varchar(20) [not null]
+  keterangan text
+}
+
+Table anggaran_kegiatan {
+  id_anggaran int [pk, increment]
+  id_kegiatan int [not null]
+  nama_pengeluaran varchar(120) [not null]
+  jumlah numeric(14,2) [not null]
+  keterangan text
+  created_at timestamp
+}
+
+Table fasilitas_kegiatan {
+  id_fasilitas_kegiatan int [pk, increment]
+  id_kegiatan int [not null]
+  nama_fasilitas varchar(120) [not null]
+  jumlah int [not null]
+  kondisi varchar(40)
+  keterangan text
+  created_at timestamp
+}
+
+Ref: profil_warga.id_warga - warga.id_warga
+Ref: kegiatan.id_kategori > kategori_kegiatan.id_kategori
+Ref: partisipasi_kegiatan.id_warga > warga.id_warga
+Ref: partisipasi_kegiatan.id_kegiatan > kegiatan.id_kegiatan
+Ref: anggaran_kegiatan.id_kegiatan > kegiatan.id_kegiatan
+Ref: fasilitas_kegiatan.id_kegiatan > kegiatan.id_kegiatan
